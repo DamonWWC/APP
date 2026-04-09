@@ -1,14 +1,3 @@
----
-AIGC:
-    ContentProducer: Minimax Agent AI
-    ContentPropagator: Minimax Agent AI
-    Label: AIGC
-    ProduceID: dde247168375de88825062249f56714a
-    PropagateID: dde247168375de88825062249f56714a
-    ReservedCode1: 3046022100e29b580337a48716189654ebc124841940e8d929dc703cbb142c9c6323597f80022100d5c97c09b41a43abd46375e27a714fc8bb75e294926cfb3035c9e1f6f562b7b6
-    ReservedCode2: 30450221008508c39cf455bdb1d408e6902afda67a05510557be9e47c8989c523ff49967b90220051a5a90c07016e6eec3bd301cf27acb4acd8c6ba2ec87796eb686ee2587d950
----
-
 # 近距离共享相册应用需求文档
 
 ## 文档信息
@@ -17,8 +6,8 @@ AIGC:
 |------|------|
 | **文档名称** | 近距离共享相册应用需求规格说明书 |
 | **版本号** | V1.0 |
-| **编写日期** | 2024年1月 |
-| **文档作者** | MiniMax Agent |
+| **编写日期** | 2026年4月 |
+| **文档作者** |  |
 | **文档状态** | 初稿 |
 
 ---
@@ -520,7 +509,7 @@ OkHttp官方文档：square.github.io/okhttp
 
 | 版本 | 日期 | 修改内容 | 作者 |
 |------|------|---------|------|
-| V1.0 | 2024年1月 | 初始版本 | MiniMax Agent |
+| V1.0 | 2026年4月 | 初始版本 |
 
 ---
 
