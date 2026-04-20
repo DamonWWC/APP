@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>近距离共享相册 - App原型</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0b57d0;
+      --primary-container: #d3e3fd;
+      --on-primary: #ffffff;
+      --secondary: #006b5e;
+      --secondary-container: #74f8e5;
+      --surface: #ffffff;
+      --surface-variant: #e1e2ec;
+      --background: #f8f9ff;
+      --on-surface: #1b1b1f;
+      --on-surface-variant: #44474f;
+      --outline: #74777f;
+      --error: #ba1a1a;
+      --error-container: #ffdady;
+      --success: #0f7b55;
+      --warning: #8b5e00;
+      --outline-variant: #c4c6d0;
+      --scrim: rgba(0,0,0,0.32);
+      --shadow: rgba(0,0,0,0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .prototype-container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: #1b1b1f;
+      border-radius: 54px;
+      padding: 12px;
+      box-shadow:
+        0 50px 100px -20px rgba(0,0,0,0.5),
+        0 30px 60px -30px rgba(0,0,0,0.6),
+        inset 0 0 0 2px #333,
+        inset 0 0 0 4px #1b1b1f;
+      position: relative;
+    }
+
+    .phone-frame::before {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #1b1b1f;
+      border-radius: 20px;
+      z-index: 100;
+    }
+
+    .screen {
+      width: 100%;
+      height: 100%;
+      background: var(--background);
+      border-radius: 42px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .screen-content {
+      height: calc(100% - 48px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .screen-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .status-bar {
+      height: 48px;
+      padding: 12px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .status-bar-time {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .status-bar-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .status-bar-icons .material-icons {
+      font-size: 18px;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: var(--surface);
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding-top: 12px;
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 4px 12px;
+    }
+
+    .nav-item .material-icons {
+      font-size: 24px;
+      color: var(--on-surface-variant);
+    }
+
+    .nav-item span {
+      font-size: 12px;
+      color: var(--on-surface-variant);
+    }
+
+    .nav-item.active .material-icons,
+    .nav-item.active span {
+      color: var(--primary);
+    }
+
+    /* Top App Bar */
+    .top-app-bar {
+      height: 64px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .top-app-bar-title {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--on-surface);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-app-bar-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .icon-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface-variant);
+    }
+
+    .icon-btn .material-icons {
+      font-size: 24px;
+      color: var(--on-surface-variant);
+    }
+
+    /* FAB */
+    .fab {
+      position: absolute;
+      bottom: 100px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--shadow);
+      transition: all 0.2s;
+    }
+
+    .fab:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px var(--shadow);
+    }
+
+    .fab .material-icons {
+      font-size: 24px;
+      color: var(--on-primary);
+    }
+
+    .fab.extended {
+      width: auto;
+      padding: 0 20px;
+      border-radius: 16px;
+      gap: 8px;
+    }
+
+    .fab.extended span {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--on-primary);
+    }
+
+    /* Photo Grid */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 8px 16px 100px;
+    }
+
+    .photo-cell {
+      aspect-ratio: 1;
+      background: var(--surface-variant);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .photo-cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-cell .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 4px 6px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.6));
+      color: white;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .photo-cell .overlay .material-icons {
+      font-size: 12px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      width: 120px;
+      height: 120px;
+      background: var(--primary-container);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .empty-state-icon .material-icons {
+      font-size: 64px;
+      color: var(--primary);
+    }
+
+    .empty-state h3 {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      color: var(--on-surface-variant);
+      line-height: 1.5;
+    }
+
+    /* Connection Status */
+    .connection-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .connection-status.connected {
+      background: #e6f4ea;
+      color: var(--success);
+    }
+
+    .connection-status.disconnected {
+      background: var(--surface-variant);
+      color: var(--on-surface-variant);
+    }
+
+    .connection-status.connecting {
+      background: #fff3e0;
+      color: var(--warning);
+    }
+
+    .connection-status.error {
+      background: var(--error-container);
+      color: var(--error);
+    }
+
+    .connection-status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .connection-status.connecting .dot {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Detail Screen */
+    .detail-screen {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      z-index: 50;
+      display: none;
+    }
+
+    .detail-screen.active {
+      display: block;
+    }
+
+    .detail-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(rgba(0,0,0,0.6), transparent);
+      z-index: 10;
+    }
+
+    .detail-header .icon-btn .material-icons {
+      color: white;
+    }
+
+    .detail-image {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detail-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .detail-info-panel {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-radius: 24px 24px 0 0;
+      padding: 24px;
+      max-height: 50%;
+      overflow-y: auto;
+    }
+
+    .detail-info-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    .detail-info-header .text h4 {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--on-surface);
+    }
+
+    .detail-info-header .text p {
+      font-size: 13px;
+      color: var(--on-surface-variant);
+    }
+
+    .detail-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .meta-item {
+      background: var(--surface-variant);
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .meta-item label {
+      font-size: 11px;
+      color: var(--on-surface-variant);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .meta-item span {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--on-surface);
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 12px;
+      padding-bottom: 20px;
+    }
+
+    .detail-btn {
+      flex: 1;
+      height: 48px;
+      border-radius: 24px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .detail-btn.primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .detail-btn.secondary {
+      background: var(--surface-variant);
+      color: var(--on-surface);
+    }
+
+    .detail-btn.danger {
+      background: var(--error-container);
+      color: var(--error);
+    }
+
+    .detail-btn .material-icons {
+      font-size: 20px;
+    }
+
+    /* Create Screen */
+    .form-section {
+      padding: 24px 16px;
+    }
+
+    .form-section h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-field {
+      width: 100%;
+      height: 56px;
+      border: 1px solid var(--outline);
+      border-radius: 8px;
+      padding: 0 16px;
+      font-size: 16px;
+      color: var(--on-surface);
+      background: transparent;
+      transition: border-color 0.2s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary);
+      border-width: 2px;
+    }
+
+    .input-field::placeholder {
+      color: var(--on-surface-variant);
+    }
+
+    .input-label {
+      font-size: 12px;
+      color: var(--on-surface-variant);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .segmented-select {
+      display: flex;
+      background: var(--surface-variant);
+      border-radius: 8px;
+      padding: 4px;
+    }
+
+    .segment {
+      flex: 1;
+      height: 40px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .segment.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 1px 3px var(--shadow);
+    }
+
+    .expandable-section {
+      margin-top: 16px;
+    }
+
+    .expandable-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      cursor: pointer;
+    }
+
+    .expandable-header h4 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--on-surface);
+    }
+
+    .expandable-header .material-icons {
+      color: var(--on-surface-variant);
+      transition: transform 0.2s;
+    }
+
+    .expandable-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s;
+    }
+
+    .expandable-content.expanded {
+      max-height: 300px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      height: 56px;
+      border: none;
+      border-radius: 28px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 24px 16px;
+      transition: all 0.2s;
+    }
+
+    .primary-btn:hover {
+      background: #0943b0;
+    }
+
+    .primary-btn:disabled {
+      background: var(--surface-variant);
+      color: var(--on-surface-variant);
+    }
+
+    /* Device List */
+    .device-list {
+      padding: 16px;
+      padding-bottom: 100px;
+    }
+
+    .device-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 1px 3px var(--shadow);
+    }
+
+    .device-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    .device-info {
+      flex: 1;
+    }
+
+    .device-info h4 {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin-bottom: 4px;
+    }
+
+    .device-info p {
+      font-size: 13px;
+      color: var(--on-surface-variant);
+    }
+
+    .device-status {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .signal-bars {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+    }
+
+    .signal-bar {
+      width: 4px;
+      background: var(--outline);
+      border-radius: 2px;
+    }
+
+    .signal-bar:nth-child(1) { height: 6px; }
+    .signal-bar:nth-child(2) { height: 10px; }
+    .signal-bar:nth-child(3) { height: 14px; }
+
+    .signal-bars.active .signal-bar {
+      background: var(--success);
+    }
+
+    /* QR Code */
+    .qr-section {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .qr-code {
+      width: 200px;
+      height: 200px;
+      background: white;
+      border-radius: 16px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .qr-code canvas {
+      border-radius: 8px;
+    }
+
+    .qr-section p {
+      font-size: 14px;
+      color: var(--on-surface-variant);
+      margin-bottom: 8px;
+    }
+
+    .qr-section .hint {
+      font-size: 12px;
+      color: var(--outline);
+    }
+
+    /* Settings */
+    .settings-list {
+      padding: 8px 0;
+    }
+
+    .settings-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .settings-item:hover {
+      background: var(--surface-variant);
+    }
+
+    .settings-item .icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--surface-variant);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+    }
+
+    .settings-item .icon .material-icons {
+      font-size: 20px;
+      color: var(--on-surface-variant);
+    }
+
+    .settings-item .text {
+      flex: 1;
+    }
+
+    .settings-item .text h4 {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--on-surface);
+    }
+
+    .settings-item .text p {
+      font-size: 13px;
+      color: var(--on-surface-variant);
+    }
+
+    .settings-item .material-icons.navigate {
+      color: var(--on-surface-variant);
+    }
+
+    .settings-item.toggle {
+      justify-content: space-between;
+    }
+
+    .toggle-switch {
+      width: 52px;
+      height: 32px;
+      background: var(--outline);
+      border-radius: 16px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-switch.active {
+      background: var(--primary);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px var(--shadow);
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(20px);
+    }
+
+    /* Scan Screen */
+    .scan-frame {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 220px;
+      height: 220px;
+      border: 3px solid white;
+      border-radius: 24px;
+      box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);
+    }
+
+    .scan-corner {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--primary);
+    }
+
+    .scan-corner.tl { top: -3px; left: -3px; border-right: none; border-bottom: none; border-radius: 12px 0 0 0; }
+    .scan-corner.tr { top: -3px; right: -3px; border-left: none; border-bottom: none; border-radius: 0 12px 0 0; }
+    .scan-corner.bl { bottom: -3px; left: -3px; border-right: none; border-top: none; border-radius: 0 0 0 12px; }
+    .scan-corner.br { bottom: -3px; right: -3px; border-left: none; border-top: none; border-radius: 0 0 12px 0; }
+
+    .scan-instruction {
+      position: absolute;
+      bottom: 180px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: white;
+      font-size: 16px;
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.9);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--surface-variant);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-overlay p {
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--on-surface-variant);
+    }
+
+    /* Dialog */
+    .dialog-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 24px;
+    }
+
+    .dialog-overlay.active {
+      display: flex;
+    }
+
+    .dialog {
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 24px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .dialog h3 {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin-bottom: 16px;
+    }
+
+    .dialog p {
+      font-size: 14px;
+      color: var(--on-surface-variant);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .dialog-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .dialog-btn {
+      height: 40px;
+      padding: 0 24px;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .dialog-btn.text {
+      background: transparent;
+      color: var(--primary);
+    }
+
+    .dialog-btn.filled {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .dialog-btn.danger {
+      background: var(--error);
+      color: white;
+    }
+
+    /* Bottom Sheet */
+    .bottom-sheet-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--scrim);
+      display: none;
+      z-index: 150;
+    }
+
+    .bottom-sheet-overlay.active {
+      display: block;
+    }
+
+    .bottom-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-radius: 24px 24px 0 0;
+      max-height: 70%;
+      overflow: hidden;
+      transform: translateY(100%);
+      transition: transform 0.3s;
+    }
+
+    .bottom-sheet.active {
+      transform: translateY(0);
+    }
+
+    .bottom-sheet-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--outline);
+      border-radius: 2px;
+      margin: 12px auto;
+    }
+
+    .bottom-sheet-content {
+      padding: 0 24px 24px;
+      max-height: calc(70% - 40px);
+      overflow-y: auto;
+    }
+
+    /* Snackbar */
+    .snackbar {
+      position: absolute;
+      bottom: 100px;
+      left: 16px;
+      right: 16px;
+      background: #323232;
+      color: white;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 300;
+    }
+
+    .snackbar.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .snackbar .action {
+      color: #bb86fc;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Screen navigation */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Description panel */
+    .description-panel {
+      width: 400px;
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .description-panel h2 {
+      font-size: 24px;
+      font-weight: 500;
+      color: #1b1b1f;
+      margin-bottom: 8px;
+    }
+
+    .description-panel .subtitle {
+      font-size: 14px;
+      color: #44474f;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #e1e2ec;
+    }
+
+    .desc-section {
+      margin-bottom: 24px;
+    }
+
+    .desc-section h4 {
+      font-size: 12px;
+      font-weight: 500;
+      color: #74777f;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .desc-section ul {
+      list-style: none;
+    }
+
+    .desc-section li {
+      font-size: 14px;
+      color: #1b1b1f;
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .desc-section li .material-icons {
+      font-size: 18px;
+      color: #0b57d0;
+    }
+
+    .screen-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .screen-nav-btn {
+      padding: 10px 16px;
+      border: 1px solid #c4c6d0;
+      border-radius: 20px;
+      background: white;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1b1b1f;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .screen-nav-btn:hover {
+      background: #f8f9ff;
+      border-color: #0b57d0;
+    }
+
+    .screen-nav-btn.active {
+      background: #0b57d0;
+      color: white;
+      border-color: #0b57d0;
+    }
+
+    .color-palette {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .color-swatch {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 4px;
+      font-size: 9px;
+      color: white;
+      font-weight: 500;
+    }
+
+    .typography-sample {
+      background: #f8f9ff;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .typography-sample .title {
+      font-size: 22px;
+      font-weight: 500;
+      color: #1b1b1f;
+      margin-bottom: 4px;
+    }
+
+    .typography-sample .body {
+      font-size: 16px;
+      color: #44474f;
+      margin-bottom: 4px;
+    }
+
+    .typography-sample .caption {
+      font-size: 13px;
+      color: #74777f;
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype-container">
+    <!-- Phone Frame 1: Home/Gallery -->
+    <div class="phone-frame">
+      <div class="screen active" id="screen-home">
+        <div class="status-bar">
+          <span class="status-bar-time">9:41</span>
+          <div class="status-bar-icons">
+            <span class="material-icons">signal_cellular_4_bar</span>
+            <span class="material-icons">wifi</span>
+            <span class="material-icons">battery_full</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="top-app-bar">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <h1 class="top-app-bar-title">家庭聚会相册</h1>
+              <div class="connection-status connected">
+                <span class="dot"></span>
+                已连接
+              </div>
+            </div>
+            <div class="top-app-bar-actions">
+              <div class="icon-btn" onclick="showScreen('screen-devices')">
+                <span class="material-icons">devices</span>
+              </div>
+              <div class="icon-btn" onclick="showScreen('screen-settings')">
+                <span class="material-icons">settings</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="photo-grid" id="photo-grid">
+            <div class="photo-cell" onclick="showDetail(0)">
+              <img src="https://picsum.photos/id/1011/400/400" alt="">
+              <div class="overlay">
+                <span class="material-icons">person</span> 小明
+              </div>
+            </div>
+            <div class="photo-cell" onclick="showDetail(1)">
+              <img src="https://picsum.photos/id/1015/400/400" alt="">
+              <div class="overlay">
+                <span class="material-icons">person</span> 小红
+              </div>
+            </div>
+            <div class="photo-cell" onclick="showDetail(2)">
+              <img src="https://picsum.photos/id/1016/400/400" alt="">
+              <div class="overlay">
+                <span class="material-icons">person</span> 小刚
+              </div>
+            </div>
+            <div class="photo-cell" onclick="showDetail(3)">
+              <img src="https://picsum.photos/id/1018/400/400" alt="">
+              <div class="overlay">
+                <span class="material-icons">person</span> 小明
+              </div>
+            </div>
+            <div class="photo-cell" onclick="showDetail(4)">
+              <img src="https://picsum.photos/id/1019/400/400" alt="">
+              <div class="overlay">
+                <span class="material-icons">person</span> 小红
+              </div>
+            </div>
+            <div class="photo-cell" onclick="showDetail(5)">
+              <img src="https://picsum.photos/id/102/400/400" alt="">
+              <div class="overlay">
+                <span class="material-icons">person</span> 小刚
+              </div>
+            </div>
+            <div class="photo-cell" onclick="showDetail(6)">
+              <img src="https://picsum.photos/id/103/400/400" alt="">
+              <div class="overlay">
+                <span class="material-icons">person</span> 小明
+              </div>
+            </div>
+            <div class="photo-cell" onclick="showDetail(7)">
+              <img src="https://picsum.photos/id/104/400/400" alt="">
+              <div class="overlay">
+                <span class="material-icons">person</span> 小红
+              </div>
+            </div>
+            <div class="photo-cell" onclick="showDetail(8)">
+              <img src="https://picsum.photos/id/106/400/400" alt="">
+              <div class="overlay">
+                <span class="material-icons">person</span> 小刚
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fab" onclick="showPhotoPicker()">
+          <span class="material-icons">add</span>
+        </div>
+
+        <div class="nav-bar">
+          <div class="nav-item active">
+            <span class="material-icons">photo_library</span>
+            <span>相册</span>
+          </div>
+          <div class="nav-item" onclick="showScreen('screen-scan')">
+            <span class="material-icons">qr_code_scanner</span>
+            <span>扫码</span>
+          </div>
+          <div class="nav-item" onclick="showScreen('screen-create')">
+            <span class="material-icons">add_circle_outline</span>
+            <span>创建</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail Screen -->
+      <div class="detail-screen" id="detail-screen">
+        <div class="detail-header">
+          <div class="icon-btn" onclick="hideDetail()">
+            <span class="material-icons">arrow_back</span>
+          </div>
+          <div class="icon-btn">
+            <span class="material-icons">more_vert</span>
+          </div>
+        </div>
+        <div class="detail-image">
+          <img id="detail-image" src="https://picsum.photos/id/1011/800/1200" alt="">
+        </div>
+        <div class="detail-info-panel">
+          <div class="detail-info-header">
+            <div class="avatar">小</div>
+            <div class="text">
+              <h4>小明</h4>
+              <p>今天 14:32 上传</p>
+            </div>
+          </div>
+          <div class="detail-meta">
+            <div class="meta-item">
+              <label>文件名</label>
+              <span>IMG_20240418_143200.jpg</span>
+            </div>
+            <div class="meta-item">
+              <label>文件大小</label>
+              <span>3.2 MB</span>
+            </div>
+            <div class="meta-item">
+              <label>分辨率</label>
+              <span>4032 × 3024</span>
+            </div>
+            <div class="meta-item">
+              <label>格式</label>
+              <span>JPEG</span>
+            </div>
+          </div>
+          <div class="detail-actions">
+            <button class="detail-btn secondary">
+              <span class="material-icons">download</span>
+              保存
+            </button>
+            <button class="detail-btn danger" onclick="showDeleteDialog()">
+              <span class="material-icons">delete</span>
+              删除
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Create Screen -->
+      <div class="screen" id="screen-create">
+        <div class="status-bar">
+          <span class="status-bar-time">9:41</span>
+          <div class="status-bar-icons">
+            <span class="material-icons">signal_cellular_4_bar</span>
+            <span class="material-icons">wifi</span>
+            <span class="material-icons">battery_full</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="top-app-bar">
+            <div class="icon-btn" onclick="showScreen('screen-home')">
+              <span class="material-icons">close</span>
+            </div>
+            <h1 class="top-app-bar-title">创建相册</h1>
+            <div style="width: 48px;"></div>
+          </div>
+
+          <div class="form-section">
+            <h3>基本信息</h3>
+            <div class="input-group">
+              <label class="input-label">相册名称 *</label>
+              <input type="text" class="input-field" placeholder="例如：家庭聚会、旅行照片" value="家庭聚会相册">
+            </div>
+
+            <div class="expandable-section">
+              <div class="expandable-header" onclick="toggleExpand()">
+                <h4>更多选项</h4>
+                <span class="material-icons expand-icon">expand_more</span>
+              </div>
+              <div class="expandable-content" id="expandable-content">
+                <div class="input-group">
+                  <label class="input-label">你的昵称</label>
+                  <input type="text" class="input-field" placeholder="用于标识上传者" value="小明">
+                </div>
+                <div class="input-group">
+                  <label class="input-label">连接方式</label>
+                  <div class="segmented-select">
+                    <button class="segment active">WiFi Direct</button>
+                    <button class="segment">便携热点</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="primary-btn" onclick="showCreateSuccess()">
+            <span class="material-icons">check</span>
+            创建相册
+          </button>
+        </div>
+      </div>
+
+      <!-- Scan Screen -->
+      <div class="screen" id="screen-scan">
+        <div class="status-bar" style="background: transparent; position: absolute; z-index: 10;">
+          <span class="status-bar-time" style="color: white;">9:41</span>
+          <div class="status-bar-icons">
+            <span class="material-icons" style="color: white;">signal_cellular_4_bar</span>
+            <span class="material-icons" style="color: white;">wifi</span>
+            <span class="material-icons" style="color: white;">battery_full</span>
+          </div>
+        </div>
+        <div class="screen-content" style="background: #000; height: 100%;">
+          <div style="height: 100%; display: flex; align-items: center; justify-content: center; position: relative;">
+            <div class="scan-frame">
+              <div class="scan-corner tl"></div>
+              <div class="scan-corner tr"></div>
+              <div class="scan-corner bl"></div>
+              <div class="scan-corner br"></div>
+            </div>
+            <div class="scan-instruction">
+              将二维码放入框内即可自动扫描
+            </div>
+            <div style="position: absolute; bottom: 120px; display: flex; gap: 20px;">
+              <div class="icon-btn" style="background: rgba(255,255,255,0.1);" onclick="showScreen('screen-home')">
+                <span class="material-icons" style="color: white;">flash_on</span>
+              </div>
+              <div class="icon-btn" style="background: rgba(255,255,255,0.1);">
+                <span class="material-icons" style="color: white;">photo_library</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Devices Screen -->
+      <div class="screen" id="screen-devices">
+        <div class="status-bar">
+          <span class="status-bar-time">9:41</span>
+          <div class="status-bar-icons">
+            <span class="material-icons">signal_cellular_4_bar</span>
+            <span class="material-icons">wifi</span>
+            <span class="material-icons">battery_full</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="top-app-bar">
+            <div class="icon-btn" onclick="showScreen('screen-home')">
+              <span class="material-icons">arrow_back</span>
+            </div>
+            <h1 class="top-app-bar-title">已连接的设备</h1>
+            <div class="icon-btn" onclick="showQRSheet()">
+              <span class="material-icons">qr_code_2</span>
+            </div>
+          </div>
+
+          <div style="padding: 16px 16px 8px;">
+            <div class="connection-status connected" style="display: inline-flex;">
+              <span class="dot"></span>
+              3人在线
+            </div>
+          </div>
+
+          <div class="device-list">
+            <div class="device-card">
+              <div class="device-avatar">群</div>
+              <div class="device-info">
+                <h4>小明（群主）</h4>
+                <p>已连接 2小时 32分钟 · 上传 12 张</p>
+              </div>
+              <div class="device-status">
+                <div class="signal-bars active">
+                  <div class="signal-bar"></div>
+                  <div class="signal-bar"></div>
+                  <div class="signal-bar"></div>
+                </div>
+              </div>
+            </div>
+            <div class="device-card">
+              <div class="device-avatar" style="background: #e8f5e9; color: #2e7d32;">红</div>
+              <div class="device-info">
+                <h4>小红</h4>
+                <p>已连接 1小时 15分钟 · 上传 5 张</p>
+              </div>
+              <div class="device-status">
+                <div class="signal-bars active">
+                  <div class="signal-bar"></div>
+                  <div class="signal-bar"></div>
+                  <div class="signal-bar"></div>
+                </div>
+              </div>
+            </div>
+            <div class="device-card">
+              <div class="device-avatar" style="background: #fff3e0; color: #ef6c00;">刚</div>
+              <div class="device-info">
+                <h4>小刚</h4>
+                <p>已连接 45分钟 · 上传 3 张</p>
+              </div>
+              <div class="device-status">
+                <div class="signal-bars">
+                  <div class="signal-bar"></div>
+                  <div class="signal-bar"></div>
+                  <div class="signal-bar" style="background: var(--outline);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="qr-section">
+            <h3 style="font-size: 16px; margin-bottom: 16px;">邀请更多人加入</h3>
+            <div class="qr-code">
+              <canvas id="qr-canvas" width="180" height="180"></canvas>
+            </div>
+            <p>扫描二维码加入相册</p>
+            <p class="hint">或让对方在相册页面点击"扫码"Tab</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Screen -->
+      <div class="screen" id="screen-settings">
+        <div class="status-bar">
+          <span class="status-bar-time">9:41</span>
+          <div class="status-bar-icons">
+            <span class="material-icons">signal_cellular_4_bar</span>
+            <span class="material-icons">wifi</span>
+            <span class="material-icons">battery_full</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="top-app-bar">
+            <div class="icon-btn" onclick="showScreen('screen-home')">
+              <span class="material-icons">arrow_back</span>
+            </div>
+            <h1 class="top-app-bar-title">设置</h1>
+            <div style="width: 48px;"></div>
+          </div>
+
+          <div class="settings-list">
+            <div class="settings-item">
+              <div class="icon">
+                <span class="material-icons">person</span>
+              </div>
+              <div class="text">
+                <h4>昵称设置</h4>
+                <p>当前昵称：小明</p>
+              </div>
+              <span class="material-icons navigate">chevron_right</span>
+            </div>
+
+            <div class="settings-item toggle">
+              <div style="display: flex; align-items: center;">
+                <div class="icon">
+                  <span class="material-icons">dark_mode</span>
+                </div>
+                <div class="text">
+                  <h4>深色模式</h4>
+                </div>
+              </div>
+              <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+            </div>
+
+            <div class="settings-item toggle">
+              <div style="display: flex; align-items: center;">
+                <div class="icon">
+                  <span class="material-icons">notifications</span>
+                </div>
+                <div class="text">
+                  <h4>上传完成通知</h4>
+                </div>
+              </div>
+              <div class="toggle-switch active"></div>
+            </div>
+
+            <div class="settings-item toggle">
+              <div style="display: flex; align-items: center;">
+                <div class="icon">
+                  <span class="material-icons">download</span>
+                </div>
+                <div class="text">
+                  <h4>下载完成通知</h4>
+                </div>
+              </div>
+              <div class="toggle-switch active"></div>
+            </div>
+          </div>
+
+          <div style="padding: 0 16px; margin-top: 16px;">
+            <h3 style="font-size: 12px; color: var(--on-surface-variant); margin-bottom: 8px; text-transform: uppercase;">存储</h3>
+            <div class="settings-list" style="background: var(--surface); border-radius: 16px;">
+              <div class="settings-item">
+                <div class="icon">
+                  <span class="material-icons">storage</span>
+                </div>
+                <div class="text">
+                  <h4>应用存储</h4>
+                  <p>已使用 256 MB</p>
+                </div>
+                <span class="material-icons navigate">chevron_right</span>
+              </div>
+              <div class="settings-item" onclick="showSnackbar('缓存已清理')">
+                <div class="icon">
+                  <span class="material-icons">delete_sweep</span>
+                </div>
+                <div class="text">
+                  <h4>清理缓存</h4>
+                  <p>可释放 48 MB 空间</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 0 16px; margin-top: 24px;">
+            <h3 style="font-size: 12px; color: var(--on-surface-variant); margin-bottom: 8px; text-transform: uppercase;">关于</h3>
+            <div class="settings-list" style="background: var(--surface); border-radius: 16px;">
+              <div class="settings-item">
+                <div class="icon">
+                  <span class="material-icons">info</span>
+                </div>
+                <div class="text">
+                  <h4>版本信息</h4>
+                  <p>V0.1.0-MVP</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 24px 16px 100px;">
+            <button class="primary-btn" style="background: var(--error-container); color: var(--error); margin: 0;" onclick="showLeaveDialog()">
+              <span class="material-icons">logout</span>
+              退出群组
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialog -->
+      <div class="dialog-overlay" id="delete-dialog">
+        <div class="dialog">
+          <h3>删除照片</h3>
+          <p>确定要删除这张照片吗？此操作不可逆，删除后其他成员也将无法看到这张照片。</p>
+          <div class="dialog-actions">
+            <button class="dialog-btn text" onclick="hideDeleteDialog()">取消</button>
+            <button class="dialog-btn danger" onclick="confirmDelete()">删除</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leave Dialog -->
+      <div class="dialog-overlay" id="leave-dialog">
+        <div class="dialog">
+          <h3>退出群组</h3>
+          <p>退出后，你将无法接收该相册的更新。已下载到本地相册的照片不会被删除。</p>
+          <div class="dialog-actions">
+            <button class="dialog-btn text" onclick="hideLeaveDialog()">取消</button>
+            <button class="dialog-btn danger" onclick="confirmLeave()">退出</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Sheet -->
+      <div class="bottom-sheet-overlay" id="qr-sheet-overlay" onclick="hideQRSheet()"></div>
+      <div class="bottom-sheet" id="qr-sheet">
+        <div class="bottom-sheet-handle"></div>
+        <div class="bottom-sheet-content">
+          <h3 style="font-size: 18px; font-weight: 500; margin-bottom: 16px; text-align: center;">邀请加入</h3>
+          <div class="qr-code" style="margin-bottom: 16px;">
+            <canvas id="qr-canvas-2" width="180" height="180"></canvas>
+          </div>
+          <p style="text-align: center; font-size: 14px; color: var(--on-surface-variant);">
+            群主：192.168.49.1:8080
+          </p>
+        </div>
+      </div>
+
+      <!-- Snackbar -->
+      <div class="snackbar" id="snackbar">
+        <span id="snackbar-text">操作成功</span>
+        <span class="action" onclick="hideSnackbar()">知道了</span>
+      </div>
+    </div>
+
+    <!-- Description Panel -->
+    <div class="description-panel">
+      <h2>近距离共享相册</h2>
+      <p class="subtitle">App原型 - V0.1.0-MVP · 基于需求文档 V1.5</p>
+
+      <div class="desc-section">
+        <h4>屏幕导航</h4>
+        <div class="screen-nav">
+          <button class="screen-nav-btn active" onclick="switchPhoneScreen('screen-home')">首页相册</button>
+          <button class="screen-nav-btn" onclick="switchPhoneScreen('screen-create')">创建相册</button>
+          <button class="screen-nav-btn" onclick="switchPhoneScreen('screen-scan')">扫码加入</button>
+          <button class="screen-nav-btn" onclick="switchPhoneScreen('screen-devices')">设备列表</button>
+          <button class="screen-nav-btn" onclick="switchPhoneScreen('screen-settings')">设置</button>
+        </div>
+      </div>
+
+      <div class="desc-section">
+        <h4>功能说明</h4>
+        <ul>
+          <li>
+            <span class="material-icons">photo_library</span>
+            <div><strong>相册浏览</strong> - 三列网格布局，按上传时间倒序</div>
+          </li>
+          <li>
+            <span class="material-icons">add</span>
+            <div><strong>上传照片</strong> - FAB 按钮触发系统相册选择</div>
+          </li>
+          <li>
+            <span class="material-icons">qr_code_scanner</span>
+            <div><strong>扫码加入</strong> - 扫描群主二维码加入相册</div>
+          </li>
+          <li>
+            <span class="material-icons">devices</span>
+            <div><strong>设备管理</strong> - 查看已连接成员</div>
+          </li>
+          <li>
+            <span class="material-icons">download</span>
+            <div><strong>照片下载</strong> - 单张保存到本地</div>
+          </li>
+          <li>
+            <span class="material-icons">delete</span>
+            <div><strong>删除照片</strong> - 群主/上传者可删除，永久删除</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="desc-section">
+        <h4>设计规范</h4>
+        <div class="color-palette">
+          <div class="color-swatch" style="background: #0b57d0;">Primary<br>#0b57d0</div>
+          <div class="color-swatch" style="background: #006b5e;">Secondary<br>#006b5e</div>
+          <div class="color-swatch" style="background: #ba1a1a;">Error<br>#ba1a1a</div>
+          <div class="color-swatch" style="background: #0f7b55;">Success<br>#0f7b55</div>
+        </div>
+      </div>
+
+      <div class="desc-section">
+        <h4>字体规范</h4>
+        <div class="typography-sample">
+          <div class="title">Title 22sp Medium</div>
+          <div class="body">Body 16sp Regular - 相册名称、按钮文字</div>
+          <div class="caption">Caption 13sp - 辅助说明、时间戳</div>
+        </div>
+      </div>
+
+      <div class="desc-section">
+        <h4>交互说明</h4>
+        <ul>
+          <li>
+            <span class="material-icons">touch_app</span>
+            <div>点击照片卡片打开详情页</div>
+          </li>
+          <li>
+            <span class="material-icons">swipe</span>
+            <div>详情页左右滑动切换照片</div>
+          </li>
+          <li>
+            <span class="material-icons">pinch</span>
+            <div>双指缩放查看照片细节</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="desc-section">
+        <h4>MVP 边界提示</h4>
+        <p style="font-size: 13px; color: var(--on-surface-variant); line-height: 1.6;">
+          本原型不含标记/评论功能（第二阶段）。<br>
+          删除为永久删除，无回收站。<br>
+          信号强度显示为第二阶段功能。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // QR Code generation
+    function generateQR(canvasId, text) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      // Simple QR-like pattern (actual QR would need a library)
+      const size = 180;
+      const cellSize = size / 15;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, size, size);
+
+      // Position patterns
+      const drawFinderPattern = (x, y) => {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(x, y, 7 * cellSize, 7 * cellSize);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x + cellSize, y + cellSize, 5 * cellSize, 5 * cellSize);
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(x + 2 * cellSize, y + 2 * cellSize, 3 * cellSize, 3 * cellSize);
+      };
+
+      drawFinderPattern(0, 0);
+      drawFinderPattern(size - 7 * cellSize, 0);
+      drawFinderPattern(0, size - 7 * cellSize);
+
+      // Data pattern (pseudo-random based on text)
+      ctx.fillStyle = '#000000';
+      for (let i = 0; i < text.length; i++) {
+        const charCode = text.charCodeAt(i);
+        for (let bit = 0; bit < 8; bit++) {
+          const x = (3 + i * 2 + bit) % 15;
+          const y = Math.floor((3 + i * 2 + bit) / 15) + 3;
+          if (y < 15) {
+            if ((charCode >> bit) & 1) {
+              ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            }
+          }
+        }
+      }
+    }
+
+    // Screen navigation
+    function showScreen(screenId) {
+      const screens = document.querySelectorAll('.screen');
+      screens.forEach(s => s.classList.remove('active'));
+
+      const targetScreen = document.getElementById(screenId);
+      if (targetScreen) {
+        targetScreen.classList.add('active');
+      }
+    }
+
+    function switchPhoneScreen(screenId) {
+      showScreen(screenId);
+
+      // Update nav buttons
+      document.querySelectorAll('.screen-nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    function showDetail(index) {
+      const detailScreen = document.getElementById('detail-screen');
+      const images = [
+        'https://picsum.photos/id/1011/800/1200',
+        'https://picsum.photos/id/1015/800/1200',
+        'https://picsum.photos/id/1016/800/1200',
+        'https://picsum.photos/id/1018/800/1200',
+        'https://picsum.photos/id/1019/800/1200',
+        'https://picsum.photos/id/102/800/1200',
+        'https://picsum.photos/id/103/800/1200',
+        'https://picsum.photos/id/104/800/1200',
+        'https://picsum.photos/id/106/800/1200'
+      ];
+      document.getElementById('detail-image').src = images[index] || images[0];
+      detailScreen.classList.add('active');
+    }
+
+    function hideDetail() {
+      document.getElementById('detail-screen').classList.remove('active');
+    }
+
+    function toggleExpand() {
+      const content = document.getElementById('expandable-content');
+      const icon = document.querySelector('.expand-icon');
+      content.classList.toggle('expanded');
+      icon.style.transform = content.classList.contains('expanded') ? 'rotate(180deg)' : '';
+    }
+
+    function showQRSheet() {
+      document.getElementById('qr-sheet-overlay').classList.add('active');
+      document.getElementById('qr-sheet').classList.add('active');
+      generateQR('qr-canvas-2', 'http://192.168.49.1:8080/');
+    }
+
+    function hideQRSheet() {
+      document.getElementById('qr-sheet-overlay').classList.remove('active');
+      document.getElementById('qr-sheet').classList.remove('active');
+    }
+
+    function showDeleteDialog() {
+      document.getElementById('delete-dialog').classList.add('active');
+    }
+
+    function hideDeleteDialog() {
+      document.getElementById('delete-dialog').classList.remove('active');
+    }
+
+    function confirmDelete() {
+      hideDeleteDialog();
+      hideDetail();
+      showSnackbar('照片已删除');
+    }
+
+    function showLeaveDialog() {
+      document.getElementById('leave-dialog').classList.add('active');
+    }
+
+    function hideLeaveDialog() {
+      document.getElementById('leave-dialog').classList.remove('active');
+    }
+
+    function confirmLeave() {
+      hideLeaveDialog();
+      showScreen('screen-home');
+      showSnackbar('已退出群组');
+    }
+
+    function showSnackbar(text) {
+      const snackbar = document.getElementById('snackbar');
+      document.getElementById('snackbar-text').textContent = text;
+      snackbar.classList.add('active');
+      setTimeout(hideSnackbar, 3000);
+    }
+
+    function hideSnackbar() {
+      document.getElementById('snackbar').classList.remove('active');
+    }
+
+    function showCreateSuccess() {
+      showSnackbar('相册创建成功');
+      setTimeout(() => showScreen('screen-home'), 500);
+    }
+
+    function showPhotoPicker() {
+      showSnackbar('选择照片（模拟）');
+    }
+
+    // Initialize QR codes
+    document.addEventListener('DOMContentLoaded', function() {
+      generateQR('qr-canvas', 'http://192.168.49.1:8080/');
+    });
+
+    // Segment button toggle
+    document.querySelectorAll('.segment').forEach(seg => {
+      seg.addEventListener('click', function() {
+        this.parentElement.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

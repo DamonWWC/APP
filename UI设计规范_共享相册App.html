@@ -1,0 +1,2597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>共享相册 App - UI设计规范</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+    :root {
+      /* Primary - Ocean Blue */
+      --primary-50: #e3f2fd;
+      --primary-100: #bbdefb;
+      --primary-200: #90caf9;
+      --primary-300: #64b5f6;
+      --primary-400: #42a5f5;
+      --primary-500: #2196f3;
+      --primary-600: #1e88e5;
+      --primary-700: #1976d2;
+      --primary-800: #1565c0;
+      --primary-900: #0d47a1;
+
+      /* Secondary - Teal */
+      --secondary-50: #e0f2f1;
+      --secondary-100: #b2dfdb;
+      --secondary-200: #80cbc4;
+      --secondary-300: #4db6ac;
+      --secondary-400: #26a69a;
+      --secondary-500: #009688;
+      --secondary-600: #00897b;
+      --secondary-700: #00796b;
+      --secondary-800: #00695c;
+
+      /* Neutral */
+      --neutral-50: #fafafa;
+      --neutral-100: #f5f5f5;
+      --neutral-200: #eeeeee;
+      --neutral-300: #e0e0e0;
+      --neutral-400: #bdbdbd;
+      --neutral-500: #9e9e9e;
+      --neutral-600: #757575;
+      --neutral-700: #616161;
+      --neutral-800: #424242;
+      --neutral-900: #212121;
+
+      /* Semantic */
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --error: #ef4444;
+      --error-light: #fee2e2;
+      --info: #3b82f6;
+      --info-light: #dbeafe;
+
+      /* Background */
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+
+      /* Text */
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-tertiary: #94a3b8;
+      --text-inverse: #ffffff;
+
+      /* Border */
+      --border-light: #e2e8f0;
+      --border-medium: #cbd5e1;
+
+      /* Shadow */
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+      /* Radius */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .doc-header {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 24px 48px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .doc-header h1 {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .doc-header h1 .badge {
+      background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+      color: white;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-weight: 500;
+    }
+
+    .doc-header .meta {
+      color: rgba(255,255,255,0.6);
+      font-size: 14px;
+    }
+
+    /* Main Content */
+    .doc-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 80px;
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+    }
+
+    .section-header h2 {
+      color: white;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-header h2 .number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .section-header p {
+      color: rgba(255,255,255,0.6);
+      font-size: 16px;
+      max-width: 600px;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      gap: 32px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+    /* Phone Mockup */
+    .phone-mockup {
+      background: #000;
+      border-radius: 44px;
+      padding: 12px;
+      box-shadow:
+        0 0 0 2px rgba(255,255,255,0.1),
+        0 25px 50px -12px rgba(0,0,0,0.8),
+        inset 0 0 0 1px rgba(255,255,255,0.05);
+      position: relative;
+    }
+
+    .phone-mockup::before {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      background: var(--bg-primary);
+      border-radius: 34px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phone-screen-content {
+      height: calc(100% - 40px);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .phone-screen-content::-webkit-scrollbar { display: none; }
+
+    /* Status Bar */
+    .status-bar {
+      height: 40px;
+      padding: 8px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-primary);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status-icons {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .status-icons svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* App Bar */
+    .app-bar {
+      height: 60px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-primary);
+    }
+
+    .app-bar-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .app-bar-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    /* Connection Badge */
+    .conn-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .conn-badge.connected {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .conn-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .conn-badge.connecting {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .conn-badge.connecting .dot {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .conn-badge.disconnected {
+      background: var(--neutral-100);
+      color: var(--neutral-600);
+    }
+
+    /* Icon Button */
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--neutral-100);
+    }
+
+    .icon-btn svg {
+      width: 24px;
+      height: 24px;
+      color: var(--neutral-700);
+    }
+
+    /* Photo Grid */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      padding: 8px 12px 100px;
+    }
+
+    .photo-cell {
+      aspect-ratio: 1;
+      background: var(--neutral-200);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .photo-cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-cell .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 6px 8px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: white;
+      font-size: 10px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .photo-cell .overlay svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* FAB */
+    .fab {
+      position: absolute;
+      bottom: 96px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(33, 150, 243, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fab:hover {
+      transform: scale(1.08);
+      box-shadow: 0 12px 32px rgba(33, 150, 243, 0.5);
+    }
+
+    .fab svg {
+      width: 28px;
+      height: 28px;
+      color: white;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 4px 16px;
+    }
+
+    .nav-item svg {
+      width: 24px;
+      height: 24px;
+      color: var(--neutral-500);
+      transition: all 0.2s;
+    }
+
+    .nav-item span {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--neutral-500);
+      transition: all 0.2s;
+    }
+
+    .nav-item.active svg {
+      color: var(--primary-500);
+    }
+
+    .nav-item.active span {
+      color: var(--primary-500);
+    }
+
+    /* Empty State */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      width: 140px;
+      height: 140px;
+      background: linear-gradient(135deg, var(--primary-50), var(--secondary-50));
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .empty-state-icon svg {
+      width: 72px;
+      height: 72px;
+      color: var(--primary-500);
+    }
+
+    .empty-state h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .empty-state p {
+      font-size: 15px;
+      color: var(--text-tertiary);
+      max-width: 280px;
+      line-height: 1.6;
+    }
+
+    /* Detail Screen */
+    .detail-screen {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      z-index: 50;
+      display: none;
+      flex-direction: column;
+    }
+
+    .detail-screen.active {
+      display: flex;
+    }
+
+    .detail-header {
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(rgba(0,0,0,0.6), transparent);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+    }
+
+    .detail-header .icon-btn svg {
+      color: white;
+    }
+
+    .detail-image {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detail-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .detail-panel {
+      background: white;
+      border-radius: 24px 24px 0 0;
+      padding: 28px 24px 120px;
+      max-height: 55%;
+      overflow-y: auto;
+    }
+
+    .detail-user {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .avatar.orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .avatar.green { background: linear-gradient(135deg, #22c55e, #16a34a); }
+    .avatar.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+    .detail-user h4 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .detail-user p {
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+
+    .detail-meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .meta-card {
+      background: var(--bg-secondary);
+      padding: 14px;
+      border-radius: var(--radius-md);
+    }
+
+    .meta-card label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .meta-card span {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .action-btn {
+      flex: 1;
+      height: 52px;
+      border-radius: var(--radius-lg);
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .action-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      color: white;
+    }
+
+    .action-btn.secondary {
+      background: var(--neutral-100);
+      color: var(--text-primary);
+    }
+
+    .action-btn.danger {
+      background: var(--error-light);
+      color: var(--error);
+    }
+
+    /* Form Screen */
+    .form-screen {
+      padding: 24px 20px;
+    }
+
+    .form-section {
+      margin-bottom: 28px;
+    }
+
+    .form-section h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-field {
+      width: 100%;
+      height: 58px;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 0 18px;
+      font-size: 16px;
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      transition: all 0.2s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+    }
+
+    .input-field::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    .input-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .segment-control {
+      display: flex;
+      background: var(--neutral-100);
+      border-radius: var(--radius-md);
+      padding: 4px;
+    }
+
+    .segment {
+      flex: 1;
+      height: 44px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .segment.active {
+      background: white;
+      color: var(--primary-600);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .expand-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      cursor: pointer;
+      border-top: 1px solid var(--border-light);
+      margin-top: 8px;
+    }
+
+    .expand-toggle h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .expand-toggle svg {
+      width: 20px;
+      height: 20px;
+      color: var(--text-tertiary);
+      transition: transform 0.3s;
+    }
+
+    .expand-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .expand-content.expanded {
+      max-height: 400px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      height: 58px;
+      border: none;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 24px;
+      box-shadow: 0 4px 16px rgba(33, 150, 243, 0.3);
+    }
+
+    .primary-btn svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Device List */
+    .device-list {
+      padding: 16px 20px 100px;
+    }
+
+    .online-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--success-light);
+      color: var(--success);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .device-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+
+    .device-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .device-info {
+      flex: 1;
+    }
+
+    .device-info h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .device-info p {
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+
+    .signal-bars {
+      display: flex;
+      gap: 3px;
+      align-items: flex-end;
+    }
+
+    .signal-bar {
+      width: 5px;
+      background: var(--neutral-300);
+      border-radius: 2px;
+    }
+
+    .signal-bar:nth-child(1) { height: 8px; }
+    .signal-bar:nth-child(2) { height: 12px; }
+    .signal-bar:nth-child(3) { height: 16px; }
+
+    .signal-bars.active .signal-bar {
+      background: var(--success);
+    }
+
+    .qr-section {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 32px 24px;
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .qr-section h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+
+    .qr-box {
+      width: 200px;
+      height: 200px;
+      background: white;
+      border-radius: var(--radius-lg);
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+    }
+
+    .qr-section p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Settings */
+    .settings-list {
+      padding: 8px 0;
+    }
+
+    .settings-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .settings-item:hover {
+      background: var(--bg-secondary);
+    }
+
+    .settings-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: var(--neutral-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+    }
+
+    .settings-icon svg {
+      width: 22px;
+      height: 22px;
+      color: var(--neutral-600);
+    }
+
+    .settings-text {
+      flex: 1;
+    }
+
+    .settings-text h4 {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .settings-text p {
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+
+    .settings-item svg.navigate {
+      color: var(--neutral-400);
+    }
+
+    .settings-toggle {
+      width: 52px;
+      height: 32px;
+      background: var(--neutral-300);
+      border-radius: 16px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .settings-toggle.active {
+      background: var(--primary-500);
+    }
+
+    .settings-toggle::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .settings-toggle.active::after {
+      transform: translateX(20px);
+    }
+
+    .settings-group {
+      margin-bottom: 24px;
+    }
+
+    .settings-group-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 20px;
+      margin-bottom: 8px;
+    }
+
+    .settings-group-content {
+      background: white;
+      border-radius: var(--radius-lg);
+      margin: 0 20px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+
+    .danger-btn {
+      background: var(--error-light);
+      color: var(--error);
+      border: none;
+      width: calc(100% - 40px);
+      margin: 24px 20px;
+      height: 56px;
+      border-radius: var(--radius-lg);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .danger-btn svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Scan Screen */
+    .scan-screen {
+      background: #000;
+      height: 100%;
+      position: relative;
+    }
+
+    .scan-area {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 240px;
+      height: 240px;
+    }
+
+    .scan-frame {
+      width: 100%;
+      height: 100%;
+      border: 3px solid rgba(255,255,255,0.8);
+      border-radius: 24px;
+      box-shadow: 0 0 0 9999px rgba(0,0,0,0.6);
+    }
+
+    .scan-corner {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--primary-500);
+    }
+
+    .scan-corner.tl { top: -3px; left: -3px; border-right: none; border-bottom: none; border-radius: 20px 0 0 0; }
+    .scan-corner.tr { top: -3px; right: -3px; border-left: none; border-bottom: none; border-radius: 0 20px 0 0; }
+    .scan-corner.bl { bottom: -3px; left: -3px; border-right: none; border-top: none; border-radius: 0 0 0 20px; }
+    .scan-corner.br { bottom: -3px; right: -3px; border-left: none; border-top: none; border-radius: 0 0 20px 0; }
+
+    .scan-instruction {
+      position: absolute;
+      bottom: 180px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .scan-hint {
+      position: absolute;
+      bottom: 220px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+    }
+
+    .scan-actions {
+      position: absolute;
+      bottom: 100px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .scan-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .scan-action-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scan-action-icon svg {
+      width: 28px;
+      height: 28px;
+      color: white;
+    }
+
+    .scan-action span {
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* Dialog */
+    .dialog-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 24px;
+    }
+
+    .dialog-overlay.active {
+      display: flex;
+    }
+
+    .dialog {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 320px;
+      animation: dialogIn 0.3s ease;
+    }
+
+    @keyframes dialogIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .dialog-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .dialog-icon.danger {
+      background: var(--error-light);
+    }
+
+    .dialog-icon.danger svg {
+      width: 32px;
+      height: 32px;
+      color: var(--error);
+    }
+
+    .dialog h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .dialog p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .dialog-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .dialog-btn {
+      flex: 1;
+      height: 48px;
+      border-radius: var(--radius-full);
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dialog-btn.text {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .dialog-btn.text:hover {
+      background: var(--neutral-100);
+    }
+
+    .dialog-btn.primary {
+      background: var(--primary-500);
+      color: white;
+    }
+
+    .dialog-btn.danger {
+      background: var(--error);
+      color: white;
+    }
+
+    /* Snackbar */
+    .snackbar {
+      position: absolute;
+      bottom: 100px;
+      left: 16px;
+      right: 16px;
+      background: #323232;
+      color: white;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 300;
+    }
+
+    .snackbar.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .snackbar .action {
+      color: #93c5fd;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Design Spec Section */
+    .spec-container {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+
+    .spec-container h3 {
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .spec-container h3 .icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spec-container h3 .icon svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+
+    /* Color Swatches */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 16px;
+    }
+
+    .color-swatch {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .color-preview {
+      height: 80px;
+    }
+
+    .color-info {
+      background: white;
+      padding: 12px;
+    }
+
+    .color-info h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .color-info p {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-family: 'SF Mono', 'Consolas', monospace;
+    }
+
+    /* Typography */
+    .type-sample {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .type-sample h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .type-sample h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .type-sample h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .type-sample p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .type-sample .caption {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-top: 8px;
+    }
+
+    /* Component Cards */
+    .component-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+
+    .component-card h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .component-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Button Samples */
+    .btn-sample {
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-sample.primary {
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      color: white;
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    }
+
+    .btn-sample.secondary {
+      background: var(--neutral-100);
+      color: var(--text-primary);
+    }
+
+    .btn-sample.outline {
+      background: transparent;
+      border: 2px solid var(--border-medium);
+      color: var(--text-primary);
+    }
+
+    .btn-sample.danger {
+      background: var(--error);
+      color: white;
+    }
+
+    .btn-sample svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Spacing */
+    .spacing-demo {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .spacing-item {
+      background: var(--primary-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary-700);
+    }
+
+    /* Shadow Demo */
+    .shadow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .shadow-item {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .shadow-item.sm { box-shadow: var(--shadow-sm); }
+    .shadow-item.md { box-shadow: var(--shadow-md); }
+    .shadow-item.lg { box-shadow: var(--shadow-lg); }
+
+    .shadow-item span {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* Print styles for export */
+    @media print {
+      body {
+        background: white;
+      }
+      .doc-header {
+        position: relative;
+        background: var(--text-primary);
+      }
+      .phone-mockup {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="doc-header">
+    <h1>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="url(#grad)"/>
+        <path d="M8 12h16v12H8z" fill="white" opacity="0.9"/>
+        <circle cx="11" cy="15" r="1.5" fill="#2196f3"/>
+        <circle cx="16" cy="15" r="1.5" fill="#4caf50"/>
+        <circle cx="21" cy="15" r="1.5" fill="#ff9800"/>
+        <defs>
+          <linearGradient id="grad" x1="0" y1="0" x2="32" y2="32">
+            <stop offset="0%" stop-color="#2196f3"/>
+            <stop offset="100%" stop-color="#009688"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      共享相册 App
+      <span class="badge">UI Design v1.0</span>
+    </h1>
+    <span class="meta">基于 Material Design 3 · 适配 Android 8.0+</span>
+  </header>
+
+  <div class="doc-content">
+    <!-- Section 1: App Screens Overview -->
+    <section class="section">
+      <div class="section-header">
+        <h2>
+          <span class="number">1</span>
+          应用界面概览
+        </h2>
+        <p>主要功能界面设计展示，包含首页、相册、扫码、创建等核心场景</p>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- Home Screen -->
+        <div>
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-icons">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.46 3 3.34 4.78.29 7.67c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l2.48 2.48c.18.18.43.29.71.29.27 0 .52-.11.7-.28.79-.74 1.69-1.36 2.66-1.85.33-.16.56-.5.56-.9v-3.1c1.45-.48 3-.73 4.6-.73s3.15.25 4.6.72v3.1c0 .4.23.74.56.9.98.49 1.87 1.12 2.66 1.85.18.18.43.28.7.28.28 0 .53-.11.71-.29l2.48-2.48c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71C20.66 4.78 16.54 3 12 3z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM11 20v-5.5H9L13 7v5.5h2L11 20z"/></svg>
+                </div>
+              </div>
+              <div class="app-bar">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span class="app-bar-title">家庭聚会相册</span>
+                  <span class="conn-badge connected">
+                    <span class="dot"></span>
+                    已连接
+                  </span>
+                </div>
+                <div class="app-bar-actions">
+                  <div class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                  </div>
+                  <div class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  </div>
+                </div>
+              </div>
+              <div class="phone-screen-content">
+                <div class="photo-grid">
+                  <div class="photo-cell">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop" alt="">
+                    <div class="overlay">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      小明
+                    </div>
+                  </div>
+                  <div class="photo-cell">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop" alt="">
+                    <div class="overlay">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      小红
+                    </div>
+                  </div>
+                  <div class="photo-cell">
+                    <img src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=400&h=400&fit=crop" alt="">
+                    <div class="overlay">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      小刚
+                    </div>
+                  </div>
+                  <div class="photo-cell">
+                    <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=400&fit=crop" alt="">
+                    <div class="overlay">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      小明
+                    </div>
+                  </div>
+                  <div class="photo-cell">
+                    <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&h=400&fit=crop" alt="">
+                    <div class="overlay">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      小红
+                    </div>
+                  </div>
+                  <div class="photo-cell">
+                    <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=400&fit=crop" alt="">
+                    <div class="overlay">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      小刚
+                    </div>
+                  </div>
+                  <div class="photo-cell">
+                    <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop" alt="">
+                    <div class="overlay">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      小明
+                    </div>
+                  </div>
+                  <div class="photo-cell">
+                    <img src="https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=400&h=400&fit=crop" alt="">
+                    <div class="overlay">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      小红
+                    </div>
+                  </div>
+                  <div class="photo-cell">
+                    <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400&h=400&fit=crop" alt="">
+                    <div class="overlay">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      小刚
+                    </div>
+                  </div>
+                </div>
+                <div class="fab">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+              </div>
+              <div class="bottom-nav">
+                <div class="nav-item active">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 22H2V10l11-7 11 7v12zm-2-2H4v-9.19l8-5.14 8 5.14V20z"/></svg>
+                  <span>相册</span>
+                </div>
+                <div class="nav-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h3v3H7zM14 7h3v3h-3zM7 14h3v3H7zM14 14h3v3h-3z"/></svg>
+                  <span>扫码</span>
+                </div>
+                <div class="nav-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                  <span>创建</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="text-align: center; color: rgba(255,255,255,0.6); margin-top: 16px; font-size: 14px;">首页 · 相册浏览</p>
+        </div>
+
+        <!-- Photo Detail -->
+        <div>
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="detail-screen active">
+                <div class="detail-header">
+                  <div class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                  </div>
+                  <div class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </div>
+                </div>
+                <div class="detail-image">
+                  <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=1200&fit=crop" alt="">
+                </div>
+                <div class="detail-panel">
+                  <div class="detail-user">
+                    <div class="avatar">小</div>
+                    <div>
+                      <h4>小明</h4>
+                      <p>今天 14:32 上传</p>
+                    </div>
+                  </div>
+                  <div class="detail-meta">
+                    <div class="meta-card">
+                      <label>文件名</label>
+                      <span>IMG_20240418_143200.jpg</span>
+                    </div>
+                    <div class="meta-card">
+                      <label>文件大小</label>
+                      <span>3.2 MB</span>
+                    </div>
+                    <div class="meta-card">
+                      <label>分辨率</label>
+                      <span>4032 × 3024</span>
+                    </div>
+                    <div class="meta-card">
+                      <label>格式</label>
+                      <span>JPEG</span>
+                    </div>
+                  </div>
+                  <div class="detail-actions">
+                    <button class="action-btn secondary">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                      保存
+                    </button>
+                    <button class="action-btn danger">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                      删除
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="text-align: center; color: rgba(255,255,255,0.6); margin-top: 16px; font-size: 14px;">照片详情页</p>
+        </div>
+
+        <!-- Create Screen -->
+        <div>
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-icons">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.46 3 3.34 4.78.29 7.67c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l2.48 2.48c.18.18.43.29.71.29.27 0 .52-.11.7-.28.79-.74 1.69-1.36 2.66-1.85.33-.16.56-.5.56-.9v-3.1c1.45-.48 3-.73 4.6-.73s3.15.25 4.6.72v3.1c0 .4.23.74.56.9.98.49 1.87 1.12 2.66 1.85.18.18.43.28.7.28.28 0 .53-.11.71-.29l2.48-2.48c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71C20.66 4.78 16.54 3 12 3z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM11 20v-5.5H9L13 7v5.5h2L11 20z"/></svg>
+                </div>
+              </div>
+              <div class="app-bar">
+                <div class="icon-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </div>
+                <span class="app-bar-title">创建相册</span>
+                <div style="width: 44px;"></div>
+              </div>
+              <div class="phone-screen-content">
+                <div class="form-screen">
+                  <div class="form-section">
+                    <h3>基本信息</h3>
+                    <div class="input-group">
+                      <label class="input-label">相册名称 *</label>
+                      <input type="text" class="input-field" value="家庭聚会相册">
+                    </div>
+
+                    <div class="expand-toggle" onclick="this.nextElementSibling.classList.toggle('expanded'); this.querySelector('svg').style.transform = this.nextElementSibling.classList.contains('expanded') ? 'rotate(180deg)' : ''">
+                      <h4>更多选项</h4>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                    <div class="expand-content">
+                      <div class="input-group">
+                        <label class="input-label">你的昵称</label>
+                        <input type="text" class="input-field" value="小明">
+                      </div>
+                      <div class="input-group">
+                        <label class="input-label">连接方式</label>
+                        <div class="segment-control">
+                          <button class="segment active">WiFi Direct</button>
+                          <button class="segment">便携热点</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button class="primary-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    创建相册
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="text-align: center; color: rgba(255,255,255,0.6); margin-top: 16px; font-size: 14px;">创建相册页</p>
+        </div>
+
+        <!-- Device List -->
+        <div>
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-icons">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.46 3 3.34 4.78.29 7.67c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l2.48 2.48c.18.18.43.29.71.29.27 0 .52-.11.7-.28.79-.74 1.69-1.36 2.66-1.85.33-.16.56-.5.56-.9v-3.1c1.45-.48 3-.73 4.6-.73s3.15.25 4.6.72v3.1c0 .4.23.74.56.9.98.49 1.87 1.12 2.66 1.85.18.18.43.28.7.28.28 0 .53-.11.71-.29l2.48-2.48c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71C20.66 4.78 16.54 3 12 3z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM11 20v-5.5H9L13 7v5.5h2L11 20z"/></svg>
+                </div>
+              </div>
+              <div class="app-bar">
+                <div class="icon-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </div>
+                <span class="app-bar-title">已连接的设备</span>
+                <div class="icon-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                </div>
+              </div>
+              <div class="phone-screen-content">
+                <div style="padding: 16px 20px 8px;">
+                  <span class="online-count">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+                    3人在线
+                  </span>
+                </div>
+                <div class="device-list">
+                  <div class="device-card">
+                    <div class="device-avatar" style="background: linear-gradient(135deg, #f97316, #ea580c);">群</div>
+                    <div class="device-info">
+                      <h4>小明（群主）</h4>
+                      <p>已连接 2小时 32分钟 · 上传 12 张</p>
+                    </div>
+                    <div class="signal-bars active">
+                      <div class="signal-bar"></div>
+                      <div class="signal-bar"></div>
+                      <div class="signal-bar"></div>
+                    </div>
+                  </div>
+                  <div class="device-card">
+                    <div class="device-avatar" style="background: linear-gradient(135deg, #22c55e, #16a34a);">红</div>
+                    <div class="device-info">
+                      <h4>小红</h4>
+                      <p>已连接 1小时 15分钟 · 上传 5 张</p>
+                    </div>
+                    <div class="signal-bars active">
+                      <div class="signal-bar"></div>
+                      <div class="signal-bar"></div>
+                      <div class="signal-bar"></div>
+                    </div>
+                  </div>
+                  <div class="device-card">
+                    <div class="device-avatar" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">刚</div>
+                    <div class="device-info">
+                      <h4>小刚</h4>
+                      <p>已连接 45分钟 · 上传 3 张</p>
+                    </div>
+                    <div class="signal-bars">
+                      <div class="signal-bar"></div>
+                      <div class="signal-bar"></div>
+                      <div class="signal-bar"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="qr-section">
+                  <h3>邀请更多人加入</h3>
+                  <div class="qr-box">
+                    <svg width="160" height="160" viewBox="0 0 160 160">
+                      <rect width="160" height="160" fill="white"/>
+                      <rect x="10" y="10" width="40" height="40" fill="#000"/>
+                      <rect x="15" y="15" width="30" height="30" fill="white"/>
+                      <rect x="20" y="20" width="20" height="20" fill="#000"/>
+                      <rect x="110" y="10" width="40" height="40" fill="#000"/>
+                      <rect x="115" y="15" width="30" height="30" fill="white"/>
+                      <rect x="120" y="20" width="20" height="20" fill="#000"/>
+                      <rect x="10" y="110" width="40" height="40" fill="#000"/>
+                      <rect x="15" y="115" width="30" height="30" fill="white"/>
+                      <rect x="20" y="120" width="20" height="20" fill="#000"/>
+                      <rect x="60" y="60" width="8" height="8" fill="#000"/>
+                      <rect x="72" y="60" width="8" height="8" fill="#000"/>
+                      <rect x="84" y="60" width="8" height="8" fill="#000"/>
+                      <rect x="60" y="72" width="8" height="8" fill="#000"/>
+                      <rect x="84" y="72" width="8" height="8" fill="#000"/>
+                      <rect x="60" y="84" width="8" height="8" fill="#000"/>
+                      <rect x="72" y="84" width="8" height="8" fill="#000"/>
+                      <rect x="60" y="96" width="8" height="8" fill="#000"/>
+                      <rect x="96" y="60" width="8" height="8" fill="#000"/>
+                      <rect x="108" y="72" width="8" height="8" fill="#000"/>
+                      <rect x="120" y="84" width="8" height="8" fill="#000"/>
+                      <rect x="132" y="96" width="8" height="8" fill="#000"/>
+                      <rect x="96" y="108" width="8" height="8" fill="#000"/>
+                      <rect x="108" y="120" width="8" height="8" fill="#000"/>
+                      <rect x="120" y="132" width="8" height="8" fill="#000"/>
+                      <rect x="132" y="144" width="8" height="8" fill="#000"/>
+                    </svg>
+                  </div>
+                  <p>扫描二维码加入相册</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="text-align: center; color: rgba(255,255,255,0.6); margin-top: 16px; font-size: 14px;">设备列表页</p>
+        </div>
+
+        <!-- Scan Screen -->
+        <div>
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="scan-screen">
+                <div class="status-bar" style="background: transparent; position: absolute; top: 0; left: 0; right: 0; z-index: 10;">
+                  <span style="color: white;">9:41</span>
+                  <div class="status-icons">
+                    <svg viewBox="0 0 24 24" fill="white"><path d="M12 3C7.46 3 3.34 4.78.29 7.67c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l2.48 2.48c.18.18.43.29.71.29.27 0 .52-.11.7-.28.79-.74 1.69-1.36 2.66-1.85.33-.16.56-.5.56-.9v-3.1c1.45-.48 3-.73 4.6-.73s3.15.25 4.6.72v3.1c0 .4.23.74.56.9.98.49 1.87 1.12 2.66 1.85.18.18.43.28.7.28.28 0 .53-.11.71-.29l2.48-2.48c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71C20.66 4.78 16.54 3 12 3z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="white"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="white"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM11 20v-5.5H9L13 7v5.5h2L11 20z"/></svg>
+                  </div>
+                </div>
+
+                <div class="scan-area">
+                  <div class="scan-frame">
+                    <div class="scan-corner tl"></div>
+                    <div class="scan-corner tr"></div>
+                    <div class="scan-corner bl"></div>
+                    <div class="scan-corner br"></div>
+                  </div>
+                </div>
+
+                <p class="scan-instruction">将二维码放入框内即可自动扫描</p>
+                <p class="scan-hint">确保光线充足，二维码清晰可见</p>
+
+                <div class="scan-actions">
+                  <div class="scan-action">
+                    <div class="scan-action-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    </div>
+                    <span>闪光灯</span>
+                  </div>
+                  <div class="scan-action" style="margin-top: 20px;">
+                    <div class="scan-action-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                    <span>相册</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="text-align: center; color: rgba(255,255,255,0.6); margin-top: 16px; font-size: 14px;">扫码加入页</p>
+        </div>
+
+        <!-- Settings Screen -->
+        <div>
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-icons">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.46 3 3.34 4.78.29 7.67c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l2.48 2.48c.18.18.43.29.71.29.27 0 .52-.11.7-.28.79-.74 1.69-1.36 2.66-1.85.33-.16.56-.5.56-.9v-3.1c1.45-.48 3-.73 4.6-.73s3.15.25 4.6.72v3.1c0 .4.23.74.56.9.98.49 1.87 1.12 2.66 1.85.18.18.43.28.7.28.28 0 .53-.11.71-.29l2.48-2.48c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71C20.66 4.78 16.54 3 12 3z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM11 20v-5.5H9L13 7v5.5h2L11 20z"/></svg>
+                </div>
+              </div>
+              <div class="app-bar">
+                <div class="icon-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </div>
+                <span class="app-bar-title">设置</span>
+                <div style="width: 44px;"></div>
+              </div>
+              <div class="phone-screen-content" style="padding-bottom: 40px;">
+                <div class="settings-group">
+                  <div class="settings-group-title">账户</div>
+                  <div class="settings-group-content">
+                    <div class="settings-item">
+                      <div class="settings-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      </div>
+                      <div class="settings-text">
+                        <h4>昵称设置</h4>
+                        <p>当前昵称：小明</p>
+                      </div>
+                      <svg class="navigate" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="settings-group">
+                  <div class="settings-group-title">偏好设置</div>
+                  <div class="settings-group-content">
+                    <div class="settings-item" style="justify-content: space-between;">
+                      <div style="display: flex; align-items: center;">
+                        <div class="settings-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                        </div>
+                        <div class="settings-text">
+                          <h4>深色模式</h4>
+                        </div>
+                      </div>
+                      <div class="settings-toggle"></div>
+                    </div>
+                    <div class="settings-item" style="justify-content: space-between; border-top: 1px solid var(--border-light);">
+                      <div style="display: flex; align-items: center;">
+                        <div class="settings-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        </div>
+                        <div class="settings-text">
+                          <h4>上传完成通知</h4>
+                        </div>
+                      </div>
+                      <div class="settings-toggle active"></div>
+                    </div>
+                    <div class="settings-item" style="justify-content: space-between; border-top: 1px solid var(--border-light);">
+                      <div style="display: flex; align-items: center;">
+                        <div class="settings-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        </div>
+                        <div class="settings-text">
+                          <h4>下载完成通知</h4>
+                        </div>
+                      </div>
+                      <div class="settings-toggle active"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="settings-group">
+                  <div class="settings-group-title">存储</div>
+                  <div class="settings-group-content">
+                    <div class="settings-item">
+                      <div class="settings-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                      </div>
+                      <div class="settings-text">
+                        <h4>应用存储</h4>
+                        <p>已使用 256 MB</p>
+                      </div>
+                      <svg class="navigate" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                    </div>
+                    <div class="settings-item" style="border-top: 1px solid var(--border-light);">
+                      <div class="settings-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                      </div>
+                      <div class="settings-text">
+                        <h4>清理缓存</h4>
+                        <p>可释放 48 MB 空间</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="danger-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  退出群组
+                </button>
+              </div>
+            </div>
+          </div>
+          <p style="text-align: center; color: rgba(255,255,255,0.6); margin-top: 16px; font-size: 14px;">设置页</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Design Tokens -->
+    <section class="section">
+      <div class="section-header">
+        <h2>
+          <span class="number">2</span>
+          设计规范
+        </h2>
+        <p>色彩系统、字体规范、间距与阴影定义</p>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- Colors -->
+        <div class="spec-container">
+          <h3>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="13.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+            </span>
+            色彩系统
+          </h3>
+          <div class="color-grid">
+            <div class="color-swatch">
+              <div class="color-preview" style="background: linear-gradient(135deg, #2196f3, #1976d2);"></div>
+              <div class="color-info">
+                <h4>Primary</h4>
+                <p>#2196f3</p>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: linear-gradient(135deg, #009688, #00796b);"></div>
+              <div class="color-info">
+                <h4>Secondary</h4>
+                <p>#009688</p>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #10b981;"></div>
+              <div class="color-info">
+                <h4>Success</h4>
+                <p>#10b981</p>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #f59e0b;"></div>
+              <div class="color-info">
+                <h4>Warning</h4>
+                <p>#f59e0b</p>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #ef4444;"></div>
+              <div class="color-info">
+                <h4>Error</h4>
+                <p>#ef4444</p>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #3b82f6;"></div>
+              <div class="color-info">
+                <h4>Info</h4>
+                <p>#3b82f6</p>
+              </div>
+            </div>
+          </div>
+
+          <h4 style="color: rgba(255,255,255,0.8); margin: 24px 0 12px; font-size: 14px;">Neutral</h4>
+          <div class="color-grid" style="grid-template-columns: repeat(5, 1fr);">
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #fafafa;"></div>
+              <div class="color-info">
+                <h4>50</h4>
+                <p>#fafafa</p>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #f5f5f5;"></div>
+              <div class="color-info">
+                <h4>100</h4>
+                <p>#f5f5f5</p>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #e0e0e0;"></div>
+              <div class="color-info">
+                <h4>300</h4>
+                <p>#e0e0e0</p>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #757575;"></div>
+              <div class="color-info">
+                <h4>600</h4>
+                <p>#757575</p>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #212121;"></div>
+              <div class="color-info">
+                <h4>900</h4>
+                <p>#212121</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="spec-container">
+          <h3>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+            </span>
+            字体规范
+          </h3>
+          <div class="type-sample">
+            <h1>大标题 32px</h1>
+            <p>App Bar Title / Screen Title</p>
+            <p class="caption">Font: Inter · Weight: 700</p>
+          </div>
+          <div class="type-sample">
+            <h2>中标题 24px</h2>
+            <p>Section Header / Card Title</p>
+            <p class="caption">Font: Inter · Weight: 600</p>
+          </div>
+          <div class="type-sample">
+            <h3>小标题 18px</h3>
+            <p>List Item Title / User Name</p>
+            <p class="caption">Font: Inter · Weight: 600</p>
+          </div>
+          <div class="type-sample">
+            <p>正文内容 16px，应用于描述文字、按钮标签等场景</p>
+            <p class="caption">Font: Inter · Weight: 400 · Line Height: 1.6</p>
+          </div>
+          <div class="type-sample">
+            <p style="font-size: 13px; color: var(--text-tertiary);">辅助说明文字 13px，用于时间戳、标签、元数据等</p>
+            <p class="caption">Font: Inter · Weight: 400</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- Spacing -->
+        <div class="spec-container">
+          <h3>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            </span>
+            间距系统
+          </h3>
+          <div class="spacing-demo">
+            <div class="spacing-item" style="width: 4px; height: 40px;">4</div>
+            <div class="spacing-item" style="width: 8px; height: 40px;">8</div>
+            <div class="spacing-item" style="width: 12px; height: 40px;">12</div>
+            <div class="spacing-item" style="width: 16px; height: 40px;">16</div>
+            <div class="spacing-item" style="width: 20px; height: 40px;">20</div>
+            <div class="spacing-item" style="width: 24px; height: 40px;">24</div>
+            <div class="spacing-item" style="width: 32px; height: 40px;">32</div>
+            <div class="spacing-item" style="width: 48px; height: 40px;">48</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 600; color: white;">4px</div>
+              <div style="font-size: 12px; color: rgba(255,255,255,0.5);">photo-cell-gap</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 600; color: white;">12px</div>
+              <div style="font-size: 12px; color: rgba(255,255,255,0.5);">screen-padding</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 600; color: white;">16px</div>
+              <div style="font-size: 12px; color: rgba(255,255,255,0.5);">section-gap</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 600; color: white;">20px</div>
+              <div style="font-size: 12px; color: rgba(255,255,255,0.5);">page-margin</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shadows -->
+        <div class="spec-container">
+          <h3>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M21 9H9v12"/></svg>
+            </span>
+            阴影系统
+          </h3>
+          <div class="shadow-grid">
+            <div class="shadow-item sm">
+              <span>Shadow SM</span>
+            </div>
+            <div class="shadow-item md">
+              <span>Shadow MD</span>
+            </div>
+            <div class="shadow-item lg">
+              <span>Shadow LG</span>
+            </div>
+          </div>
+          <div style="margin-top: 20px; background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+            <div style="font-size: 13px; color: rgba(255,255,255,0.7); font-family: 'SF Mono', Consolas, monospace;">
+              <div>--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05)</div>
+              <div style="margin-top: 8px;">--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1)</div>
+              <div style="margin-top: 8px;">--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radius -->
+      <div class="spec-container">
+        <h3>
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>
+          </span>
+          圆角系统
+        </h3>
+        <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+          <div style="text-align: center;">
+            <div style="width: 60px; height: 60px; background: var(--primary-500); border-radius: 6px;"></div>
+            <p style="color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 8px;">6px · sm</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 60px; height: 60px; background: var(--primary-500); border-radius: 10px;"></div>
+            <p style="color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 8px;">10px · md</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 60px; height: 60px; background: var(--primary-500); border-radius: 16px;"></div>
+            <p style="color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 8px;">16px · lg</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 60px; height: 60px; background: var(--primary-500); border-radius: 24px;"></div>
+            <p style="color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 8px;">24px · xl</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 60px; height: 60px; background: var(--primary-500); border-radius: 9999px;"></div>
+            <p style="color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 8px;">9999px · full</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Components -->
+    <section class="section">
+      <div class="section-header">
+        <h2>
+          <span class="number">3</span>
+          组件规范
+        </h2>
+        <p>常用 UI 组件的设计与交互规范</p>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- Buttons -->
+        <div class="spec-container">
+          <h3>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="8" rx="4"/></svg>
+            </span>
+            按钮
+          </h3>
+          <div class="component-row">
+            <button class="btn-sample primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              主要按钮
+            </button>
+            <button class="btn-sample secondary">次要按钮</button>
+          </div>
+          <div class="component-row">
+            <button class="btn-sample outline">描边按钮</button>
+            <button class="btn-sample danger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              删除
+            </button>
+          </div>
+          <div style="margin-top: 24px; background: var(--bg-secondary); padding: 20px; border-radius: 12px;">
+            <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">按钮状态</h4>
+            <div class="component-row">
+              <button class="btn-sample primary" style="opacity: 0.7;">禁用</button>
+              <button class="btn-sample primary" style="background: linear-gradient(135deg, #1976d2, #1565c0);">按下</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Fields -->
+        <div class="spec-container">
+          <h3>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+            输入框
+          </h3>
+          <div class="input-group" style="margin-bottom: 16px;">
+            <label class="input-label">默认状态</label>
+            <input type="text" class="input-field" placeholder="请输入相册名称">
+          </div>
+          <div class="input-group" style="margin-bottom: 16px;">
+            <label class="input-label">输入状态</label>
+            <input type="text" class="input-field" value="家庭聚会相册" style="border-color: var(--primary-500); box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);">
+          </div>
+          <div class="input-group">
+            <label class="input-label">禁用状态</label>
+            <input type="text" class="input-field" value="不可编辑" disabled style="background: var(--neutral-100); opacity: 0.7;">
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- Connection Badge -->
+        <div class="spec-container">
+          <h3>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+            </span>
+            连接状态
+          </h3>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <span class="conn-badge connected">
+              <span class="dot"></span>
+              已连接
+            </span>
+            <span class="conn-badge connecting">
+              <span class="dot"></span>
+              连接中
+            </span>
+            <span class="conn-badge disconnected">
+              <span class="dot"></span>
+              未连接
+            </span>
+          </div>
+        </div>
+
+        <!-- Avatar -->
+        <div class="spec-container">
+          <h3>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            头像
+          </h3>
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div class="avatar" style="width: 40px; height: 40px; font-size: 14px;">小</div>
+            <div class="avatar orange" style="width: 48px; height: 48px; font-size: 16px;">红</div>
+            <div class="avatar green" style="width: 56px; height: 56px; font-size: 18px;">绿</div>
+            <div class="avatar purple" style="width: 64px; height: 64px; font-size: 20px;">紫</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dialog -->
+      <div class="spec-container">
+        <h3>
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="8" rx="4"/><path d="M12 8v8"/></svg>
+          </span>
+          对话框
+        </h3>
+        <div style="max-width: 360px; background: white; border-radius: 24px; padding: 28px 24px;">
+          <div style="width: 64px; height: 64px; background: var(--error-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </div>
+          <h3 style="text-align: center; font-size: 20px; font-weight: 600; margin-bottom: 12px;">确认删除</h3>
+          <p style="text-align: center; font-size: 15px; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.6;">确定要删除这张照片吗？此操作不可逆。</p>
+          <div style="display: flex; gap: 12px;">
+            <button style="flex: 1; height: 48px; border-radius: 24px; border: none; background: var(--neutral-100); font-size: 15px; font-weight: 600; cursor: pointer;">取消</button>
+            <button style="flex: 1; height: 48px; border-radius: 24px; border: none; background: var(--error); color: white; font-size: 15px; font-weight: 600; cursor: pointer;">删除</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Flow -->
+    <section class="section">
+      <div class="section-header">
+        <h2>
+          <span class="number">4</span>
+          用户流程
+        </h2>
+        <p>核心功能的交互流程与页面跳转关系</p>
+      </div>
+
+      <div class="spec-container">
+        <h3>
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </span>
+          创建相册流程
+        </h3>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary-500), var(--secondary-500)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </div>
+            <p style="color: white; font-size: 14px; font-weight: 500;">点击创建</p>
+          </div>
+          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M0 12h30M30 12l-8-8M30 12l-8 8"/></svg>
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: var(--bg-secondary); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <p style="color: white; font-size: 14px; font-weight: 500;">填写信息</p>
+          </div>
+          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M0 12h30M30 12l-8-8M30 12l-8 8"/></svg>
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: var(--bg-secondary); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>
+            </div>
+            <p style="color: white; font-size: 14px; font-weight: 500;">等待连接</p>
+          </div>
+          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M0 12h30M30 12l-8-8M30 12l-8 8"/></svg>
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: var(--success-light); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M22 22H2V10l11-7 11 7v12zm-2-2H4v-9.19l8-5.14 8 5.14V20z"/></svg>
+            </div>
+            <p style="color: white; font-size: 14px; font-weight: 500;">相册就绪</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-container">
+        <h3>
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h3v3H7zM14 7h3v3h-3zM7 14h3v3H7zM14 14h3v3h-3z"/></svg>
+          </span>
+          加入相册流程
+        </h3>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary-500), var(--secondary-500)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h3v3H7zM14 7h3v3h-3zM7 14h3v3H7z"/></svg>
+            </div>
+            <p style="color: white; font-size: 14px; font-weight: 500;">扫码/发现</p>
+          </div>
+          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M0 12h30M30 12l-8-8M30 12l-8 8"/></svg>
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: var(--bg-secondary); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            </div>
+            <p style="color: white; font-size: 14px; font-weight: 500;">解析地址</p>
+          </div>
+          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M0 12h30M30 12l-8-8M30 12l-8 8"/></svg>
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: var(--bg-secondary); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p style="color: white; font-size: 14px; font-weight: 500;">确认加入</p>
+          </div>
+          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><path d="M0 12h30M30 12l-8-8M30 12l-8 8"/></svg>
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: var(--success-light); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M22 22H2V10l11-7 11 7v12zm-2-2H4v-9.19l8-5.14 8 5.14V20z"/></svg>
+            </div>
+            <p style="color: white; font-size: 14px; font-weight: 500;">浏览相册</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: QR Code Spec -->
+    <section class="section">
+      <div class="section-header">
+        <h2>
+          <span class="number">5</span>
+          二维码规范
+        </h2>
+        <p>加入二维码的格式标准与生成规则</p>
+      </div>
+
+      <div class="spec-container">
+        <div class="grid grid-2" style="align-items: center;">
+          <div>
+            <h4 style="color: white; font-size: 18px; font-weight: 600; margin-bottom: 16px;">二维码内容格式</h4>
+            <div style="background: #000; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+              <code style="color: #10b981; font-size: 15px; font-family: 'SF Mono', Consolas, monospace;">
+                http://192.168.49.1:8080/
+              </code>
+            </div>
+            <ul style="color: rgba(255,255,255,0.7); font-size: 14px; line-height: 2; list-style: none;">
+              <li>• <strong style="color: white;">格式：</strong>单行 UTF-8 文本</li>
+              <li>• <strong style="color: white;">Scheme：</strong>http（固定）</li>
+              <li>• <strong style="color: white;">Host：</strong>IPv4 地址</li>
+              <li>• <strong style="color: white;">Port：</strong>8080（默认）</li>
+              <li>• <strong style="color: white;">结尾：</strong>可选 /</li>
+            </ul>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 200px; height: 200px; background: white; border-radius: 16px; margin: 0 auto; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg);">
+              <svg width="180" height="180" viewBox="0 0 180 180">
+                <rect width="180" height="180" fill="white"/>
+                <rect x="10" y="10" width="50" height="50" fill="#000"/>
+                <rect x="18" y="18" width="34" height="34" fill="white"/>
+                <rect x="25" y="25" width="20" height="20" fill="#000"/>
+                <rect x="120" y="10" width="50" height="50" fill="#000"/>
+                <rect x="128" y="18" width="34" height="34" fill="white"/>
+                <rect x="135" y="25" width="20" height="20" fill="#000"/>
+                <rect x="10" y="120" width="50" height="50" fill="#000"/>
+                <rect x="18" y="128" width="34" height="34" fill="white"/>
+                <rect x="25" y="135" width="20" height="20" fill="#000"/>
+                <rect x="70" y="70" width="10" height="10" fill="#000"/>
+                <rect x="85" y="70" width="10" height="10" fill="#000"/>
+                <rect x="100" y="70" width="10" height="10" fill="#000"/>
+                <rect x="70" y="85" width="10" height="10" fill="#000"/>
+                <rect x="100" y="85" width="10" height="10" fill="#000"/>
+                <rect x="70" y="100" width="10" height="10" fill="#000"/>
+                <rect x="85" y="100" width="10" height="10" fill="#000"/>
+                <rect x="70" y="115" width="10" height="10" fill="#000"/>
+                <rect x="115" y="70" width="10" height="10" fill="#000"/>
+                <rect x="130" y="85" width="10" height="10" fill="#000"/>
+                <rect x="145" y="100" width="10" height="10" fill="#000"/>
+                <rect x="115" y="115" width="10" height="10" fill="#000"/>
+                <rect x="130" y="130" width="10" height="10" fill="#000"/>
+                <rect x="145" y="145" width="10" height="10" fill="#000"/>
+                <rect x="115" y="130" width="10" height="10" fill="#000"/>
+                <rect x="115" y="145" width="10" height="10" fill="#000"/>
+                <rect x="130" y="115" width="10" height="10" fill="#000"/>
+                <rect x="145" y="115" width="10" height="10" fill="#000"/>
+              </svg>
+            </div>
+            <p style="color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 16px;">示例二维码</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Export Info -->
+    <section class="section">
+      <div class="spec-container" style="text-align: center; padding: 60px 40px;">
+        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary-500), var(--secondary-500)); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <h2 style="color: white; font-size: 28px; font-weight: 600; margin-bottom: 12px;">设计规范文档</h2>
+        <p style="color: rgba(255,255,255,0.6); font-size: 16px; max-width: 500px; margin: 0 auto 32px;">
+          本文档包含共享相册 App 的完整 UI 设计规范，可直接用于开发参考
+        </p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <div style="background: rgba(255,255,255,0.1); padding: 12px 24px; border-radius: 12px;">
+            <div style="font-size: 24px; font-weight: 700; color: white;">v1.0</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.5);">版本号</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); padding: 12px 24px; border-radius: 12px;">
+            <div style="font-size: 24px; font-weight: 700; color: white;">6</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.5);">主界面</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); padding: 12px 24px; border-radius: 12px;">
+            <div style="font-size: 24px; font-weight: 700; color: white;">50+</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.5);">组件样式</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); padding: 12px 24px; border-radius: 12px;">
+            <div style="font-size: 24px; font-weight: 700; color: white;">MVP</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.5);">首版范围</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Add interactive toggle functionality
+    document.querySelectorAll('.settings-toggle').forEach(toggle => {
+      toggle.addEventListener('click', function() {
+        this.classList.toggle('active');
+      });
+    });
+
+    // Segment control
+    document.querySelectorAll('.segment-control').forEach(control => {
+      control.querySelectorAll('.segment').forEach(seg => {
+        seg.addEventListener('click', function() {
+          control.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
